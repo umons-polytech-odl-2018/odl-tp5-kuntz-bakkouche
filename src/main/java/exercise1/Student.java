@@ -1,8 +1,6 @@
 package exercise1;
 
-import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Represents a student.
@@ -11,13 +9,22 @@ import java.util.Set;
  * These scores are expressed as integers on a scale from 0 to 20.
  */
 public class Student {
+
+    private String name;
+    private String registrationNumber;
+
+    HashMap<String,Integer> cours = new HashMap <String, Integer>();
+
+
     /**
      * Creates a new Student.
      *
      * @throws NullPointerException if one of the parameter is null.
      */
-    public Student(String name, String registrationNumber) {
 
+    public Student(String name, String registrationNumber) {
+        this.name = name;
+        this.registrationNumber = registrationNumber;
     }
 
     /**
@@ -29,6 +36,8 @@ public class Student {
      */
     public void setScore(String course, int score) {
 
+        cours.put(course,score);
+
     }
 
     /**
@@ -37,7 +46,9 @@ public class Student {
      * @return the score if found, <code>OptionalInt#empty()</code> otherwise.
      */
     public OptionalInt getScore(String course) {
-        return null;
+
+        Integer score = cours.get(course);
+        return score != null ? OptionalInt.of(score) : OptionalInt.empty();
     }
 
     /**
@@ -46,7 +57,17 @@ public class Student {
      * @return the average score or 0 if there is none.
      */
     public double averageScore() {
-        return 0;
+
+        double somme = 0;
+        Collection<Integer> tmp = cours.values();
+        Iterator it = tmp.iterator();
+        while(it.hasNext())
+        {
+            int tmp2 = (int) it.next();
+            somme += tmp2;
+        }
+        somme /= cours.size();
+        return somme;
     }
 
     /**
@@ -55,6 +76,10 @@ public class Student {
      * @return the best scored course or <code>Optional#empty()</code> if there is none.
      */
     public Optional<String> bestCourse() {
+
+        int tmp = bestScore();
+
+
         return null;
     }
 
@@ -64,7 +89,18 @@ public class Student {
      * @return the highest score or 0 if there is none.
      */
     public int bestScore() {
-        return 0;
+
+        int score = 0;
+        Collection<Integer> tmp = cours.values();
+        Iterator it = tmp.iterator();
+        while(it.hasNext())
+        {
+            int tmp2 = (int) it.next();
+            if(score<tmp2)
+                score = tmp2;
+        }
+
+        return score;
     }
 
     /**
@@ -88,11 +124,11 @@ public class Student {
     public Set<String> attendedCourses() { return null; }
 
     public String getName() {
-        return null;
+        return name;
     }
 
     public String getRegistrationNumber() {
-        return null;
+        return registrationNumber;
     }
 
     @Override
@@ -101,4 +137,14 @@ public class Student {
         sb.append(" (").append(getRegistrationNumber()).append(")");
         return sb.toString();
     }
+
+    public static void main(String args[])
+    {
+        Student kuntz = new Student("kuntz","171265");
+        kuntz.setScore("Anum",10);
+        kuntz.setScore("Méca",18);
+        System.out.println(kuntz.averageScore());
+        System.out.println(kuntz.bestScore());
+    }
 }
+
